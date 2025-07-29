@@ -9,7 +9,13 @@ const app: Express = express();
 const port = process.env.PORT || 3001;
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://expense-iq.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  })
+);
 
 // Updated MongoDB connection with proper options
 mongoose

@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Dashboard } from './pages/dashboard';
 import { Auth } from './pages/dashboard/auth/index';
 import { FinancialRecordsProvider } from './contexts/financial-record-context';
@@ -20,11 +20,8 @@ function App() {
             <h1 className='app-title'>ExpenseIQ</h1>
           </div>
           <div className='navbar-right'>
-            <Link to='/' className='dashboard-link'>
-              Dashboard
-            </Link>
             <SignedIn>
-              <UserButton />
+              <UserButton userProfileMode='modal' afterSignOutUrl='/' />
             </SignedIn>
             <SignedOut>
               <SignInButton mode='modal'>
