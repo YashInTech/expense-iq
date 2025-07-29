@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
-import {
-  FinancialRecord,
-  useFinancialRecords,
-} from '../../contexts/financial-record-context';
-import { useTable, Column, CellProps, Row } from 'react-table';
+import { useFinancialRecords } from '../../contexts/financial-record-context';
+import { useTable } from 'react-table';
 
-interface EditableCellProps extends CellProps<FinancialRecord> {
+type EditableCellProps = {
+  value: any;
+  row: any;
+  column: any;
   updateRecord: (rowIndex: number, columnId: string, value: any) => void;
   editable: boolean;
-}
+};
 
 const EditableCell: React.FC<EditableCellProps> = ({
   value: initialValue,
@@ -18,7 +18,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   editable,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState<any>(initialValue);
 
   const onBlur = () => {
     setIsEditing(false);
@@ -43,6 +43,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
             borderRadius: '4px',
           }}
         />
+      ) : column.id === 'amount' ? (
+        <span>₹{value}</span>
       ) : typeof value === 'string' ? (
         value
       ) : value instanceof Date ? (
@@ -63,18 +65,20 @@ export const FinancialRecordList = () => {
     updateRecord(id ?? '', { ...records[rowIndex], [columnId]: value });
   };
 
-  const handleClick = (row: Row<FinancialRecord>) => {
+  const handleClick = (row: any) => {
     console.log('Row clicked:', row.original);
   };
 
-  const columns: Array<Column<FinancialRecord>> = useMemo(
+  const columns = useMemo(
     () => [
       {
         Header: 'Description',
         accessor: 'description',
-        Cell: (props: CellProps<FinancialRecord>) => (
+        Cell: (props: any) => (
           <EditableCell
-            {...props}
+            value={props.value}
+            row={props.row}
+            column={props.column}
             updateRecord={updateCellRecord}
             editable={true}
           />
@@ -83,7 +87,7 @@ export const FinancialRecordList = () => {
       {
         Header: 'Amount',
         accessor: 'amount',
-        Cell: (props: CellProps<FinancialRecord>) => (
+        Cell: (props: any) => (
           <EditableCell
             {...props}
             updateRecord={updateCellRecord}
@@ -94,7 +98,7 @@ export const FinancialRecordList = () => {
       {
         Header: 'Category',
         accessor: 'category',
-        Cell: (props: CellProps<FinancialRecord>) => (
+        Cell: (props: any) => (
           <EditableCell
             {...props}
             updateRecord={updateCellRecord}
@@ -105,7 +109,7 @@ export const FinancialRecordList = () => {
       {
         Header: 'Payment Method',
         accessor: 'paymentMethod',
-        Cell: (props: CellProps<FinancialRecord>) => (
+        Cell: (props: any) => (
           <EditableCell
             {...props}
             updateRecord={updateCellRecord}
@@ -116,7 +120,7 @@ export const FinancialRecordList = () => {
       {
         Header: 'Date',
         accessor: 'date',
-        Cell: (props: CellProps<FinancialRecord>) => (
+        Cell: (props: any) => (
           <EditableCell
             {...props}
             updateRecord={updateCellRecord}
@@ -127,7 +131,7 @@ export const FinancialRecordList = () => {
       {
         Header: 'Actions',
         id: 'delete',
-        Cell: ({ row }: CellProps<FinancialRecord>) => (
+        Cell: ({ row }: any) => (
           <button
             onClick={() => deleteRecord(row.original._id ?? '')}
             className='delete'
@@ -183,11 +187,11 @@ export const FinancialRecordList = () => {
     <div className='table-container'>
       <table {...getTableProps()} className='table'>
         <thead>
-          {headerGroups.map((hg) => {
+          {headerGroups.map((hg: any) => {
             const { key, ...headerGroupProps } = hg.getHeaderGroupProps();
             return (
               <tr key={key} {...headerGroupProps}>
-                {hg.headers.map((column) => {
+                {hg.headers.map((column: any) => {
                   const { key, ...headerProps } = column.getHeaderProps();
                   return (
                     <th key={key} {...headerProps}>
@@ -200,7 +204,7 @@ export const FinancialRecordList = () => {
           })}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
+          {rows.map((row: any) => {
             prepareRow(row);
             const { key, ...rowProps } = {
               key: row.id,
@@ -208,7 +212,7 @@ export const FinancialRecordList = () => {
             };
             return (
               <tr key={key} {...rowProps}>
-                {row.cells.map((cell) => {
+                {row.cells.map((cell: any) => {
                   const { key, ...cellProps } = cell.getCellProps();
                   return (
                     <td key={key} {...cellProps}>
