@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/react-table.d.ts","./src/vite-env.d.ts","./src/contexts/financial-record-context.tsx","./src/pages/dashboard/financial-record-form.tsx","./src/pages/dashboard/financial-record-list.tsx","./src/pages/dashboard/index.tsx","./src/pages/dashboard/auth/index.tsx"],"version":"5.6.3"}
